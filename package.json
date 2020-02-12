@@ -7,7 +7,7 @@
     "test": "jest --detectOpenHandles --coverage --forceExit",
     "circle": "jest --runInBand --coverage --forceExit --reporters=jest-junit",
     "start": "nodemon server/server.js",
-    "build": "webpack",
+    "build": "webpack -d --watch",
     "seed": "node db/seeder.js",
     "db": "node index.js"
   },
