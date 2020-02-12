@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Faker = require('faker');
 const mongoose = require('mongoose');
-const { schema } = require('./schema.js');
+const { schema } = require('./schemaOld.js');
 
 
 mongoose.connect('mongodb://localhost/reviews', {
@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/reviews', {
 const reviewSchema = new mongoose.Schema(schema);
 const Review = mongoose.model('Review', reviewSchema);
 
-var t0 = new Date;
+const t0 = new Date;
 // Formatted date maker
 const dateFormatter = () => {
   const date = Faker.date.past().toString();
@@ -35,16 +35,15 @@ const ratingGenerator = () => {
 };
 
 // for 2000 documents
-let arrayOfDocs = [];
-let res = 2000;
-let quantityOfReviews = Math.random() * 10 + 10;
+const arrayOfDocs = [];
+// let res = 2000;
 for (let i = 0; i < 100; i += 1) {
   let currentPictureId = 10;
-  //random number of reviews for item
-  var arrayOfReviews = [];
+  const quantityOfReviews = Math.random() * 10 + 10;
+  // random number of reviews for item
   for (let j = 0; j < quantityOfReviews; j += 1) {
-    const review = {
-
+    const document = new Review({
+      dbId: i,
       urlId: j,
       username: Faker.internet.userName(),
       datePosted: dateFormatter(),
@@ -53,8 +52,7 @@ for (let i = 0; i < 100; i += 1) {
       text: Faker.lorem.lines(3),
       rating: ratingGenerator(),
       itemForSale: Faker.commerce.productName(),
-      // ]
-    };
+    });
     // .save()
     // .then (()=> {
     //   res --;
@@ -64,21 +62,14 @@ for (let i = 0; i < 100; i += 1) {
     //     mongoose.connection.close();
     //   }
     // });
-    arrayOfReviews.push(review);
     currentPictureId += 1;
+    arrayOfDocs.push(document);
   }
-  //construct and push
-  const document = new Review({
-    dbId: i,
-    reviews: arrayOfReviews,
-  });
-  arrayOfDocs.push(document);
 }
 Review.insertMany(arrayOfDocs)
-    .then(() => {
-      let t1 = new Date;
-      console.log('seeded database in', t1 - t0, ' ms');
-      mongoose.connection.close();
-    })
-    .catch((err) => console.error('Error: ', err));
-
+  .then(() => {
+    const t1 = new Date;
+    console.log('seeded database in', t1 - t0, ' ms');
+    mongoose.connection.close();
+  })
+  .catch((err) => console.error('Error: ', err));

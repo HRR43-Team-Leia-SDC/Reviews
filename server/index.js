@@ -1,12 +1,21 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
-require('dotenv').config();
-const port = process.env.PORT;
-const db = require('../db/index.js');
-let Reviews = require('../db/schema.js');
 const expressStaticGzip = require('express-static-gzip');
+require('dotenv').config();
 
+//MONGOOSE
+const mongoose = require('mongoose');
+const { schema } = require('../db/schema.js');
+mongoose.connect('mongodb://localhost/reviews', {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
+const reviewSchema = new mongoose.Schema(schema);
+const Review = mongoose.model('Review', reviewSchema);
+
+
+const app = express();
+app.use(bodyParser.json());
 
 app.use('/', expressStaticGzip(__dirname + '/public', {
   enableBrotli: true,
@@ -16,12 +25,10 @@ app.use('/', expressStaticGzip(__dirname + '/public', {
   }
 }));
 
-app.use(bodyParser.json());
-
 // a route to request all review objects from the db
 app.get('/reviews/:id', (req, res) => {
   const id = req.params.id;
-  db.schema.Reviews.find({dbId: id})
+  Review.find({dbId: id})
     .then((dbObj) => {
       res.json(dbObj);
     })
