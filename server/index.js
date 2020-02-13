@@ -12,6 +12,7 @@ mongoose.connect('mongodb://localhost/reviews', {
 });
 const reviewSchema = new mongoose.Schema(schema);
 const Review = mongoose.model('Review', reviewSchema);
+//const Rev = mongoose.model('Rev', )
 
 
 const app = express();
@@ -28,7 +29,7 @@ app.use('/', expressStaticGzip(__dirname + '/public', {
 // a route to request all review objects from the db
 app.get('/reviews/:id', (req, res) => {
   const id = req.params.id;
-  Review.find({dbId: id})
+  Review.find({'reviews.username': "AlexK"})
     .then((dbObj) => {
       res.json(dbObj);
     })
@@ -39,6 +40,7 @@ app.get('/reviews/:id', (req, res) => {
     });
 })
 
+//it will delete all the reviews for product (dbId), there should be another delete - to delete a specific review
 app.delete('/reviews/:id', (req, res) => {
   const id = req.params.id;
   Review.deleteOne({dbId: id})
@@ -52,6 +54,9 @@ app.delete('/reviews/:id', (req, res) => {
     });
 })
 
+// use find in find having 2 schemas!
+//to change review to existing product => get all reviews from ?
+//current product reviews should live in REDIS
 app.put('/reviews/:id', (req, res) => {
   const id = req.params.id;
   Review.updateOne({dbId: id}, req.body)
@@ -65,6 +70,10 @@ app.put('/reviews/:id', (req, res) => {
     });
 })
 
+//for future:
+//avoid double posting of the same data
+//to change review to existing product => get all reviews from ?
+//current product reviews should live in REDIS
 app.post('/reviews/:id', (req, res) => {
   const id = req.params.id;
   const document = new Review(req.body)  //schema-valid JSON should be sent to server, inculing!!!!! the main id(dbId)
