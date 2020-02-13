@@ -44,7 +44,6 @@ for (let i = 0; i < 100; i += 1) {
   var arrayOfReviews = [];
   for (let j = 0; j < quantityOfReviews; j += 1) {
     const review = {
-
       urlId: j,
       username: Faker.internet.userName(),
       datePosted: dateFormatter(),
@@ -53,7 +52,6 @@ for (let i = 0; i < 100; i += 1) {
       text: Faker.lorem.lines(3),
       rating: ratingGenerator(),
       itemForSale: Faker.commerce.productName(),
-      // ]
     };
     // .save()
     // .then (()=> {

@@ -39,4 +39,44 @@ app.get('/reviews/:id', (req, res) => {
     });
 })
 
+app.delete('/reviews/:id', (req, res) => {
+  const id = req.params.id;
+  Review.deleteOne({dbId: id})
+    .then((dbObj) => {
+      res.json(dbObj);
+    })
+    .catch((err) => {
+      if (err) {
+        res.sendStatus(404);  //It is not the right code
+      }
+    });
+})
+
+app.put('/reviews/:id', (req, res) => {
+  const id = req.params.id;
+  Review.updateOne({dbId: id}, req.body)
+    .then((dbObj) => {
+      res.json(dbObj);
+    })
+    .catch((err) => {
+      if (err) {
+        res.sendStatus(404);
+      }
+    });
+})
+
+app.post('/reviews/:id', (req, res) => {
+  const id = req.params.id;
+  const document = new Review(req.body)  //schema-valid JSON should be sent to server, inculing!!!!! the main id(dbId)
+  document.save()
+    .then((dbObj) => {
+      res.json(dbObj);
+    })
+    .catch((err) => {
+      if (err) {
+        res.sendStatus(404);
+      }
+    });
+})
+
 module.exports = app;
