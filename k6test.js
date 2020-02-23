@@ -2,11 +2,24 @@ import http from "k6/http";
 import { sleep } from "k6";
 
 export let options = {
-  vus: 10,
-  duration: "30s"
+  vus: 200,
+  rps: 1000,
+  duration: "120s"
 };
 
 export default function() {
-  http.get("http://test.loadimpact.com");
-  sleep(1);
+  let num = Math.floor(Math.random() * 10000000);
+
+  let req1 = {
+    method: 'GET',
+    url: `http://localhost:2000/?${num}`,
+  }
+
+  let req2 = {
+    method: 'GET',
+    url: `http://localhost:2000/reviews/${num}`,
+  }
+
+  let resp = http.batch([req1, req2]);
+  //sleep(1);
 };
