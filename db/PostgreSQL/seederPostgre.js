@@ -4,7 +4,7 @@ const { Client } = require('pg');
 
 const client = new Client({
   database: 'reviews',
-  user: 'alexk',
+  user: 'ak',
   password: '',
 });
 
@@ -32,9 +32,9 @@ const ratingGenerator = () => {
 
 // seed!
 let counter = 0;
-let t0 = Date;
+let t0 = new Date;
 const insert = 'insert into reviews (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
-let cycle = 100;
+let cycle = 500;
 let values = Array;
 let quantityOfReviews = Number;
 let currentPictureId = Number;
@@ -44,11 +44,9 @@ let j = Number;
 client.connect()
   .then(async() => {
     for (let x = 0; x < cycle; x += 1) {
-      t0 = new Date;
-      console.log(counter);
       values = [[],[],[],[],[],[],[],[],[]];
-      for (i = 0; i < 5000; i += 1) {
-        quantityOfReviews = Math.random() * 10 + 10;
+      for (i = 0; i < 100; i += 1) {
+        quantityOfReviews = Math.random() * 5 + 5;
         currentPictureId = 10;
         for (j = 0; j < quantityOfReviews; j += 1) {
           values[0].push(i);
@@ -66,8 +64,8 @@ client.connect()
       }
       await client.query(insert, values)
         .then(() => {values=[];
-          console.log('saved');console.log(new Date - t0);
-          if (x === 99) {console.log('saved ALL'); client.end();}
+          //console.log('saved', counter);
+          if (x === cycle - 1 ) {console.log('saved ALL in',new Date - t0, counter); client.end();}
         })
         .catch(err => console.error('connection error', err.stack));
 

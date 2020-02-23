@@ -8,7 +8,7 @@ CREATE TABLE reviews (
   id serial NOT NULL,
   dbId int  ,
   urlId int  ,
-  username varchar(50)  ,
+  username varchar(100)  ,
   datePosted Date  ,
   imageUrl varchar(200)  ,
   avatarImgUrl varchar(200)  ,
