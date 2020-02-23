@@ -6,3 +6,4 @@ package-lock.json
 junit.xml
 server/public/index.js.br
 server/public/index.js.gz
+newrelic.js
