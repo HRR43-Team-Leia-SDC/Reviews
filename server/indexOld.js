@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const expressStaticGzip = require('express-static-gzip');
 require('dotenv').config();
 
-//MONGOOSE
+
 const mongoose = require('mongoose');
 const { schema } = require('../db/schema.js');
 mongoose.connect('mongodb://localhost/reviews', {
