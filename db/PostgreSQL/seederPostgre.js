@@ -34,7 +34,7 @@ const ratingGenerator = () => {
 let counter = 0;
 let t0 = new Date;
 const insert = 'insert into rev (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
-let cycle = 100;
+let cycle = 100000;
 let values = Array;
 let quantityOfReviews = Number;
 let currentPictureId = Number;
