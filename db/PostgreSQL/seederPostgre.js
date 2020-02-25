@@ -4,8 +4,8 @@ const { Client } = require('pg');
 
 const client = new Client({
   database: 'reviews',
-  user: 'ak',
-  password: '',
+  user: 'postgres',
+  password: 'password',
 });
 
 const select = 'select * from reviews';
