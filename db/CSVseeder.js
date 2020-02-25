@@ -1,6 +1,6 @@
 const Faker = require('faker');
 const fs = require('fs');
-const stream = fs.createWriteStream('./data100k.csv', { highWaterMark: 5000000 }); // highWaterMark=
+const stream = fs.createWriteStream('./data.csv', { highWaterMark: 5000000 }); // highWaterMark=
 
 // Formatted date maker
 const dateFormatter = () => {
@@ -37,7 +37,7 @@ let row = '';
 let counter = 0;
 
 function writeToCSV(writer, encoding, callback) {
-  let i = 100000;
+  let i = 10000000;
   write();
   function write() {
     var ok = true;
