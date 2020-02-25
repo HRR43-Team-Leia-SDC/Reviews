@@ -33,13 +33,14 @@ const ratingGenerator = () => {
 // seed!
 let counter = 0;
 let t0 = new Date;
-const insert = 'insert into reviews (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
-let cycle = 500;
+const insert = 'insert into rev (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
+let cycle = 100;
 let values = Array;
 let quantityOfReviews = Number;
 let currentPictureId = Number;
 let i = Number;
 let j = Number;
+let c = 0;
 
 client.connect()
   .then(async() => {
@@ -49,7 +50,7 @@ client.connect()
         quantityOfReviews = Math.random() * 5 + 5;
         currentPictureId = 10;
         for (j = 0; j < quantityOfReviews; j += 1) {
-          values[0].push(i);
+          values[0].push(c + i);
           values[1].push(j);
           values[2].push(Faker.internet.userName());
           values[3].push(dateFormatter());
@@ -65,10 +66,10 @@ client.connect()
       await client.query(insert, values)
         .then(() => {values=[];
           //console.log('saved', counter);
-          if (x === cycle - 1 ) {console.log('saved ALL in',new Date - t0, counter); client.end();}
+          if (x === cycle - 1 ) {console.log('saved ALL in',new Date - t0, counter); client.end();  }
         })
         .catch(err => console.error('connection error', err.stack));
-
+      c = c + cycle;
     }
   })
   .catch(err => console.error('connection error', err.stack));
