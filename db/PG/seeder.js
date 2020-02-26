@@ -3,12 +3,11 @@ const Faker = require('faker');
 const { Client } = require('pg');
 
 const client = new Client({
-  database: 'reviews',
-  user: 'postgres',
-  password: 'password',
+  database: 'rev',
+  user: 'ak',
+  password: '',
 });
 
-const select = 'select * from reviews';
 // Formatted date maker
 const dateFormatter = () => {
   const date = Faker.date.past().toString();
@@ -34,7 +33,7 @@ const ratingGenerator = () => {
 let counter = 0;
 let t0 = new Date;
 const insert = 'insert into rev (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
-let cycle = 100000;
+let cycle = 10000;
 let values = Array;
 let quantityOfReviews = Number;
 let currentPictureId = Number;
@@ -46,7 +45,7 @@ client.connect()
   .then(async() => {
     for (let x = 0; x < cycle; x += 1) {
       values = [[],[],[],[],[],[],[],[],[]];
-      for (i = 0; i < 100; i += 1) {
+      for (i = 0; i < 1000; i += 1) {
         quantityOfReviews = Math.random() * 5 + 5;
         currentPictureId = 10;
         for (j = 0; j < quantityOfReviews; j += 1) {
@@ -56,7 +55,7 @@ client.connect()
           values[3].push(dateFormatter());
           values[4].push(`https://www.placecage.com/100/1${currentPictureId}`);
           values[5].push(`https://www.placecage.com/200/2${currentPictureId}`);
-          values[6].push(Faker.lorem.lines(3));
+          values[6].push(Faker.lorem.lines(1));
           values[7].push(ratingGenerator());
           values[8].push(Faker.commerce.productName());
           currentPictureId++;
@@ -69,7 +68,9 @@ client.connect()
           if (x === cycle - 1 ) {console.log('saved ALL in',new Date - t0, counter); client.end();  }
         })
         .catch(err => console.error('connection error', err.stack));
-      c = c + cycle;
+      c = c + 1000;
     }
   })
   .catch(err => console.error('connection error', err.stack));
+
+
