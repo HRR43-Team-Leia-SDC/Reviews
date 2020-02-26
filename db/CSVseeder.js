@@ -37,7 +37,7 @@ let row = '';
 let counter = 0;
 
 function writeToCSV(writer, encoding, callback) {
-  let i = 10000000;
+  let i = 10;
   write();
   function write() {
     var ok = true;
