@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const client = new Client({
   database: 'rev',
   user: 'ak',
-  password: '',
+  password: 'password',
 });
 
 // Formatted date maker
@@ -33,7 +33,7 @@ const ratingGenerator = () => {
 let counter = 0;
 let t0 = new Date;
 const insert = 'insert into rev (dbId, urlId, username, datePosted,imageUrl,avatarImgUrl,text,rating,itemForSale) select * from unnest ($1::int[], $2::int[], $3::text[], $4::date[], $5::text[], $6::text[], $7::text[], $8::real[], $9::text[])';
-let cycle = 10000;
+let cycle = 200000;
 let values = Array;
 let quantityOfReviews = Number;
 let currentPictureId = Number;
@@ -45,7 +45,7 @@ client.connect()
   .then(async() => {
     for (let x = 0; x < cycle; x += 1) {
       values = [[],[],[],[],[],[],[],[],[]];
-      for (i = 0; i < 1000; i += 1) {
+      for (i = 0; i < 50; i += 1) {
         quantityOfReviews = Math.random() * 5 + 5;
         currentPictureId = 10;
         for (j = 0; j < quantityOfReviews; j += 1) {
@@ -68,7 +68,8 @@ client.connect()
           if (x === cycle - 1 ) {console.log('saved ALL in',new Date - t0, counter); client.end();  }
         })
         .catch(err => console.error('connection error', err.stack));
-      c = c + 1000;
+      c = c + 50;
+      if (c%1000000 === 0) {console.log(c);}
     }
   })
   .catch(err => console.error('connection error', err.stack));
