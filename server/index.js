@@ -2,10 +2,13 @@ const nr = require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressStaticGzip = require('express-static-gzip');
+const cors = require('cors');
+
 require('dotenv').config();
 
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/', expressStaticGzip(__dirname + '/public', {
   enableBrotli: true,
@@ -15,14 +18,22 @@ app.use('/', expressStaticGzip(__dirname + '/public', {
   }
 }));
 
-const { getById } = require('../db/PostgreSQL/postgreQueries.js');
+const { getById } = require('../db/PG/postgreQueries.js');
 
-// a route to request all review objects from the db
+
+//loader IO
+app.get("/loaderio-5fbf2c0aea965cf58adb218b83e9bece.txt", (req,res) => {
+	console.log('loader');
+  res.sendFile('/home/ubuntu/repos/Reviews/server/loaderio-5fbf2c0aea965cf58adb218b83e9bece.txt');
+});
+
+
+
 app.get('/reviews/:id', (req, res) => {
-  const id = req.params.id;
+console.log(req.params);
+	const id = req.params.id;
   getById(id,(data)=>{
     res.send(data);
-
   });
 });
 
